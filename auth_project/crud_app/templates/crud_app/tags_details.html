@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Tag Details</title>
+{% endblock %}
+
+{% block content %}
+    <center><h3>Tag Details</h3></center>
+    {% if object %}
+        <p><strong>Tag Name :</strong> <a style="text-decoration:none;" href="{{ object.get_absolute_url }}">#{{ object.tag_name }}</a></p>
+        <p><strong>Blogs :</strong></p>
+        {% for blog in object.blogs.all %}
+            <p><strong>Title :</strong> <a style="text-decoration:none;" href="{{ blog.get_absolute_url }}">{{blog.title}}</a></p>
+            <p><strong>Content :</strong> {{blog.content}}</p>
+            <p><strong>Owner:</strong> {{blog.created_by.get_full_name}}</p>
+            <p><strong>Created Time:</strong> {{blog.created_time}}</p><br><br><br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

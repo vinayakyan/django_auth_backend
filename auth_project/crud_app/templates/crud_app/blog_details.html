@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Blog Details</title>
+{% endblock %}
+
+{% block content %}
+    <center><h3>Blog Details</h3></center>
+    {% if object %}
+    <p><strong>Title :</strong> {{object.title}}</p>
+    <p><strong>Content :</strong> {{object.content}}</p>
+    <p><strong>Owner:</strong> {{object.created_by.get_full_name}}</p>
+    <p><strong>Created Time:</strong> {{object.created_time}}</p>
+    <p><strong>Tags: </strong>
+    {% for tag in object.tags.all %}
+        <a href="{{tag.get_absolute_url}}">#{{ tag.tag_name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {% endfor %}
+    </p>
+    <p>
+        <strong>Comments: </strong>
+        {% for comment in object.comments.all %}
+        <p>{{comment.comment_text}} {{comment.comment_time}} By: {{comment.comment_by.get_full_name}}</p><br><br><br>
+        {% endfor %}
+    </p>
+    <form method="post" >
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-outline-success mr-1">Add Comment</button>
+        {% if not user.is_authenticated %}
+            <a class="text-decoration:none;" href="{% url 'login'%}"><button type="button" class="btn btn-outline-secondary mr-1">Login</button></a>
+        {% endif %}
+    </form>
+    {% endif %}
+{% endblock %}
